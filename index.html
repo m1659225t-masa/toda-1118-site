@@ -136,29 +136,33 @@ const firebaseConfig = {
   projectId: "toda-1118-project",
   storageBucket: "toda-1118-project.appspot.com",
   messagingSenderId: "674905210403",
-  appId: "1:674905210403:web:4e190d372fbae980dabb96",
-  measurementId: "G-T6E4NG9XV2"
+  appId: "1:674905210403:web:4e190d372fbae980dabb96"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-async function loadStats() {
+console.log("Firebase起動OK");
 
-  const docRef = doc(db, "stats", "global");
-  const docSnap = await getDoc(docRef);
+async function testFirestore() {
+  try {
+    const docRef = doc(db, "stats", "global");
+    const docSnap = await getDoc(docRef);
 
-  if (docSnap.exists()) {
+    console.log("Firestore取得結果:", docSnap.exists());
 
-    const data = docSnap.data();
+    if (docSnap.exists()) {
+      console.log(docSnap.data());
+    } else {
+      console.log("documentが見つからない");
+    }
 
-    document.getElementById("daimoku").innerText = data.totalDaimoku;
-    document.getElementById("dialogue").innerText = data.totalDialogue;
-    document.getElementById("members").innerText = data.activeMembers;
+  } catch (error) {
+    console.error("Firestoreエラー:", error);
   }
 }
 
-loadStats();
+testFirestore();
 
 </script>
 </body>
