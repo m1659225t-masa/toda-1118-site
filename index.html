@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>戸田区男子部 11.18 PROJECT</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: #0b0b0b;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 30px;
+    }
+
+    h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    .countdown {
+      font-size: 64px;
+      font-weight: bold;
+      margin: 30px 0;
+    }
+
+    .card-area {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      padding: 40px;
+    }
+
+    .card {
+      background: #181818;
+      border-radius: 20px;
+      padding: 30px;
+      min-width: 220px;
+    }
+
+    .number {
+      font-size: 36px;
+      margin-top: 10px;
+    }
+
+    .schedule {
+      padding: 60px 20px;
+      background: #121212;
+    }
+
+    .section-title {
+      font-size: 32px;
+      margin-bottom: 30px;
+    }
+
+    @media(max-width:768px){
+      h1 {
+        font-size: 34px;
+      }
+
+      .countdown {
+        font-size: 42px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <section class="hero">
+    <h1>戸田区男子部 11.18 PROJECT</h1>
+    <p>創価学会創立記念日まで</p>
+    <div class="countdown" id="countdown"></div>
+  </section>
+
+  <section class="card-area">
+
+    <div class="card">
+      <div>累計題目数</div>
+      <div class="number" id="daimoku">0</div>
+    </div>
+
+    <div class="card">
+      <div>累計対話数</div>
+      <div class="number" id="dialogue">0</div>
+    </div>
+
+    <div class="card">
+      <div>活動人数</div>
+      <div class="number" id="members">0</div>
+    </div>
+
+  </section>
+
+  <section class="schedule">
+    <div class="section-title">清水桜城会館 唱題会</div>
+    <p>毎週 火曜・木曜 20:00〜</p>
+  </section>
+
+  <script>
+    const targetDate = new Date("2026-11-18");
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = targetDate - now;
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+      document.getElementById("countdown").innerHTML =
+        days + " 日";
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+
+</body>
+</html>
