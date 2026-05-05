@@ -164,5 +164,11 @@ async function loadStats() {
 loadStats();
 </script>
 
+<script>
+fetch("https://firestore.googleapis.com")
+  .then(res => console.log("Firestore接続OK:", res.status))
+  .catch(err => console.error("Firestore接続NG:", err));
+</script>
+  
 </body>
 </html>
