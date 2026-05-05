@@ -24,14 +24,15 @@
     }
 
     h1 {
-      font-size: 48px;
+      font-size: 42px;
       margin-bottom: 10px;
+      letter-spacing: 2px;
     }
 
     .countdown {
-      font-size: 64px;
+      font-size: 60px;
       font-weight: bold;
-      margin: 30px 0;
+      margin: 20px 0;
     }
 
     .card-area {
@@ -39,14 +40,15 @@
       justify-content: center;
       gap: 20px;
       flex-wrap: wrap;
-      padding: 40px;
+      padding: 30px;
     }
 
     .card {
       background: #181818;
       border-radius: 20px;
-      padding: 30px;
+      padding: 25px;
       min-width: 220px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.05);
     }
 
     .number {
@@ -54,19 +56,40 @@
       margin-top: 10px;
     }
 
+    .buttons {
+      margin-top: 15px;
+    }
+
+    button {
+      margin: 5px;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(45deg, #ff4b2b, #ff416c);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+
     .schedule {
-      padding: 60px 20px;
+      padding: 50px 20px;
       background: #121212;
     }
 
     .section-title {
-      font-size: 32px;
-      margin-bottom: 30px;
+      font-size: 28px;
+      margin-bottom: 20px;
     }
 
     @media(max-width:768px){
-      h1 { font-size: 34px; }
-      .countdown { font-size: 42px; }
+      h1 { font-size: 30px; }
+      .countdown { font-size: 40px; }
     }
   </style>
 </head>
@@ -84,16 +107,25 @@
     <div class="card">
       <div>累計題目数</div>
       <div class="number" id="daimoku">0</div>
+      <div class="buttons">
+        <button onclick="addDaimoku()">＋1</button>
+      </div>
     </div>
 
     <div class="card">
       <div>累計対話数</div>
       <div class="number" id="dialogue">0</div>
+      <div class="buttons">
+        <button onclick="addDialogue()">＋1</button>
+      </div>
     </div>
 
     <div class="card">
       <div>活動人数</div>
       <div class="number" id="members">0</div>
+      <div class="buttons">
+        <button onclick="addMember()">＋1</button>
+      </div>
     </div>
 
   </section>
@@ -103,8 +135,8 @@
     <p>毎週 火曜・木曜 20:00〜</p>
   </section>
 
-  <!-- カウントダウン -->
   <script>
+    // カウントダウン
     const targetDate = new Date("2026-11-18");
 
     function updateCountdown() {
@@ -116,35 +148,34 @@
 
     updateCountdown();
     setInterval(updateCountdown, 1000);
-  </script>
 
-  <!-- Firebase Realtime Database -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    // 仮データ
+    let daimoku = 100;
+    let dialogue = 10;
+    let members = 5;
 
-  <script>
-    var firebaseConfig = {
-      apiKey: "AIzaSyDRG1rZrDYCAjgmxaRjSsFlMnywlCxvkMQ",
-      authDomain: "toda-1118-project.firebaseapp.com",
-      databaseURL: "https://toda-1118-project-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "toda-1118-project"
-    };
+    function render() {
+      document.getElementById("daimoku").innerText = daimoku;
+      document.getElementById("dialogue").innerText = dialogue;
+      document.getElementById("members").innerText = members;
+    }
 
-    // 初期化
-    firebase.initializeApp(firebaseConfig);
+    function addDaimoku() {
+      daimoku++;
+      render();
+    }
 
-    var db = firebase.database();
+    function addDialogue() {
+      dialogue++;
+      render();
+    }
 
-    // データ取得（リアルタイム）
-    db.ref("stats").on("value", function(snapshot) {
-      var data = snapshot.val();
+    function addMember() {
+      members++;
+      render();
+    }
 
-      if (data) {
-        document.getElementById("daimoku").innerText = data.totalDaimoku;
-        document.getElementById("dialogue").innerText = data.totalDialogue;
-        document.getElementById("members").innerText = data.activeMembers;
-      }
-    });
+    render();
   </script>
 
 </body>
