@@ -125,52 +125,40 @@
     setInterval(updateCountdown, 1000);
   </script>
 
-<!-- Firebase CDN -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<!-- Firebase v8 CDN -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
 <script>
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
+var firebaseConfig = {
   apiKey: "AIzaSyDRG1rZrDYCAjgmxaRjSsFlMnywlCxvkMQ",
   authDomain: "toda-1118-project.firebaseapp.com",
   projectId: "toda-1118-project",
-  storageBucket: "toda-1118-project.firebasestorage.app",
+  storageBucket: "toda-1118-project.appspot.com",
   messagingSenderId: "674905210403",
-  appId: "1:674905210403:web:0e5ebd39fbe609e7dabb96",
-  measurementId: "G-2JT7B5K9M9"
+  appId: "1:674905210403:web:0e5ebd39fbe609e7dabb96"
 };
-  
+
 // 初期化
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+var db = firebase.firestore();
 
 // データ取得
-async function loadStats() {
-  try {
-    const doc = await db.collection("stats").doc("global").get();
-
+db.collection("stats").doc("global").get()
+  .then(function(doc) {
     if (doc.exists) {
-      const data = doc.data();
+      var data = doc.data();
 
       document.getElementById("daimoku").innerText = data.totalDaimoku;
       document.getElementById("dialogue").innerText = data.totalDialogue;
       document.getElementById("members").innerText = data.activeMembers;
+    } else {
+      console.log("ドキュメントなし");
     }
-
-  } catch (e) {
-    console.error("Firestoreエラー:", e);
-  }
-}
-
-loadStats();
+  })
+  .catch(function(error) {
+    console.error("Firestoreエラー:", error);
+  });
 </script>
-
-<script>
-fetch("https://firestore.googleapis.com")
-  .then(res => console.log("Firestore接続OK:", res.status))
-  .catch(err => console.error("Firestore接続NG:", err));
-</script>
-  
 </body>
 </html>
