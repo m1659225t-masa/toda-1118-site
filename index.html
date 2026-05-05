@@ -131,10 +131,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDRG1rZrDYCAjgmxaRjSsFlMnywlCxvkMQ",   // ← あなたのAPI Key
+  apiKey: "AIzaSyDRG1rZrDYCAjgmxaRjSsFlMnywlCxvkMQ",
   authDomain: "toda-1118-project.firebaseapp.com",
   projectId: "toda-1118-project",
-  storageBucket: "toda-1118-project.firebasestorage.app",
+  storageBucket: "toda-1118-project.appspot.com",
   messagingSenderId: "674905210403",
   appId: "1:674905210403:web:0e5ebd39fbe609e7dabb96"
 };
@@ -142,28 +142,38 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-console.log("Firebase起動OK");
+console.log("🔥 Firebase起動OK");
 
-async function testFirestore() {
+async function loadStats() {
   try {
+    console.log("📡 Firestore接続開始");
+
     const docRef = doc(db, "stats", "global");
     const docSnap = await getDoc(docRef);
 
-    console.log("Firestore取得結果:", docSnap.exists());
+    console.log("📄 docSnap:", docSnap);
 
     if (docSnap.exists()) {
-      console.log(docSnap.data());
+      console.log("✅ データ取得成功", docSnap.data());
+
+      const data = docSnap.data();
+
+      document.getElementById("daimoku").innerText = data.totalDaimoku;
+      document.getElementById("dialogue").innerText = data.totalDialogue;
+      document.getElementById("members").innerText = data.activeMembers;
+
     } else {
-      console.log("documentが見つからない");
+      console.log("❌ ドキュメントが存在しない");
     }
 
   } catch (error) {
-    console.error("Firestoreエラー:", error);
+    console.error("❌ Firestoreエラー詳細:", error);
   }
 }
 
-testFirestore();
+loadStats();
 
 </script>
+
 </body>
 </html>
