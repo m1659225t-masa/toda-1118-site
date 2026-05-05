@@ -125,11 +125,11 @@
     setInterval(updateCountdown, 1000);
   </script>
 
-<script type="module">
+<!-- Firebase CDN -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { initializeFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
+<script>
 const firebaseConfig = {
   apiKey: "AIzaSyDRG1rZrDYCAjgmxaRjSsFlMnywlCxvkMQ",
   authDomain: "toda-1118-project.firebaseapp.com",
@@ -139,33 +139,29 @@ const firebaseConfig = {
   appId: "1:674905210403:web:0e5ebd39fbe609e7dabb96"
 };
 
-const app = initializeApp(firebaseConfig);
+// 初期化
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-// 👇 ここが重要
-const db = initializeFirestore(app, {
-  experimentalForceLongPolling: true
-});
-
+// データ取得
 async function loadStats() {
   try {
-    const docRef = doc(db, "stats", "global");
-    const docSnap = await getDoc(docRef);
+    const doc = await db.collection("stats").doc("global").get();
 
-    if (docSnap.exists()) {
-      const data = docSnap.data();
+    if (doc.exists) {
+      const data = doc.data();
 
       document.getElementById("daimoku").innerText = data.totalDaimoku;
       document.getElementById("dialogue").innerText = data.totalDialogue;
       document.getElementById("members").innerText = data.activeMembers;
     }
 
-  } catch (error) {
-    console.error("Firestoreエラー:", error);
+  } catch (e) {
+    console.error("Firestoreエラー:", e);
   }
 }
 
 loadStats();
-
 </script>
 
 </body>
