@@ -128,7 +128,7 @@
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDRG1rZrDYCAjgmxaRjSsFlMnywlCxvkMQ",
@@ -140,34 +140,27 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
-console.log("🔥 Firebase起動OK");
+// 👇 ここが重要
+const db = initializeFirestore(app, {
+  experimentalForceLongPolling: true
+});
 
 async function loadStats() {
   try {
-    console.log("📡 Firestore接続開始");
-
     const docRef = doc(db, "stats", "global");
     const docSnap = await getDoc(docRef);
 
-    console.log("📄 docSnap:", docSnap);
-
     if (docSnap.exists()) {
-      console.log("✅ データ取得成功", docSnap.data());
-
       const data = docSnap.data();
 
       document.getElementById("daimoku").innerText = data.totalDaimoku;
       document.getElementById("dialogue").innerText = data.totalDialogue;
       document.getElementById("members").innerText = data.activeMembers;
-
-    } else {
-      console.log("❌ ドキュメントが存在しない");
     }
 
   } catch (error) {
-    console.error("❌ Firestoreエラー詳細:", error);
+    console.error("Firestoreエラー:", error);
   }
 }
 
