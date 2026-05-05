@@ -65,13 +65,8 @@
     }
 
     @media(max-width:768px){
-      h1 {
-        font-size: 34px;
-      }
-
-      .countdown {
-        font-size: 42px;
-      }
+      h1 { font-size: 34px; }
+      .countdown { font-size: 42px; }
     }
   </style>
 </head>
@@ -108,47 +103,49 @@
     <p>毎週 火曜・木曜 20:00〜</p>
   </section>
 
+  <!-- カウントダウン -->
   <script>
     const targetDate = new Date("2026-11-18");
 
     function updateCountdown() {
       const now = new Date();
       const diff = targetDate - now;
-
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-      document.getElementById("countdown").innerHTML =
-        days + " 日";
+      document.getElementById("countdown").innerHTML = days + " 日";
     }
 
     updateCountdown();
     setInterval(updateCountdown, 1000);
   </script>
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <!-- Firebase Realtime Database -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
-<script>
-var firebaseConfig = {
-  apiKey: "AIzaSyDRG1rZrDYCAjgmxaRjSsFlMnywlCxvkMQ",
-  authDomain: "toda-1118-project.firebaseapp.com",
-  databaseURL: "https://toda-1118-project-default-rtdb.firebaseio.com/",
-  projectId: "toda-1118-project"
-};
+  <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyDRG1rZrDYCAjgmxaRjSsFlMnywlCxvkMQ",
+      authDomain: "toda-1118-project.firebaseapp.com",
+      databaseURL: "https://toda-1118-project-default-rtdb.firebaseio.com/",
+      projectId: "toda-1118-project"
+    };
 
-// 初期化
-firebase.initializeApp(firebaseConfig);
-var db = firebase.database();
+    // 初期化
+    firebase.initializeApp(firebaseConfig);
 
-// データ取得（リアルタイム）
-db.ref("stats").on("value", function(snapshot) {
-  var data = snapshot.val();
+    var db = firebase.database();
 
-  document.getElementById("daimoku").innerText = data.totalDaimoku;
-  document.getElementById("dialogue").innerText = data.totalDialogue;
-  document.getElementById("members").innerText = data.activeMembers;
-});
-</script>
+    // データ取得（リアルタイム）
+    db.ref("stats").on("value", function(snapshot) {
+      var data = snapshot.val();
+
+      if (data) {
+        document.getElementById("daimoku").innerText = data.totalDaimoku;
+        document.getElementById("dialogue").innerText = data.totalDialogue;
+        document.getElementById("members").innerText = data.activeMembers;
+      }
+    });
+  </script>
+
 </body>
 </html>
