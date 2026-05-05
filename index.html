@@ -8,7 +8,7 @@
   <style>
     body {
       margin: 0;
-      background: #0b0b0b;
+      background: radial-gradient(circle at top, #1a1a1a, #000);
       color: white;
       font-family: sans-serif;
       text-align: center;
@@ -25,14 +25,18 @@
 
     h1 {
       font-size: 42px;
-      margin-bottom: 10px;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
+      background: linear-gradient(90deg, #ff4b2b, #ffcc00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .countdown {
-      font-size: 60px;
+      font-size: 70px;
       font-weight: bold;
       margin: 20px 0;
+      color: #ffcc00;
+      text-shadow: 0 0 20px rgba(255,204,0,0.6);
     }
 
     .card-area {
@@ -44,16 +48,23 @@
     }
 
     .card {
-      background: #181818;
+      background: rgba(255,255,255,0.05);
       border-radius: 20px;
       padding: 25px;
       min-width: 220px;
-      box-shadow: 0 0 20px rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 30px rgba(255,75,43,0.2);
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px) scale(1.02);
     }
 
     .number {
-      font-size: 36px;
+      font-size: 40px;
       margin-top: 10px;
+      font-weight: bold;
     }
 
     .buttons {
@@ -73,13 +84,12 @@
     }
 
     button:hover {
-      transform: scale(1.05);
-      opacity: 0.9;
+      transform: scale(1.08);
     }
 
     .schedule {
       padding: 50px 20px;
-      background: #121212;
+      background: #111;
     }
 
     .section-title {
@@ -88,8 +98,8 @@
     }
 
     @media(max-width:768px){
-      h1 { font-size: 30px; }
-      .countdown { font-size: 40px; }
+      h1 { font-size: 28px; }
+      .countdown { font-size: 42px; }
     }
   </style>
 </head>
@@ -108,7 +118,7 @@
       <div>累計題目数</div>
       <div class="number" id="daimoku">0</div>
       <div class="buttons">
-        <button onclick="addDaimoku()">＋1</button>
+        <button onclick="addDaimoku()">🔥＋1</button>
       </div>
     </div>
 
@@ -116,7 +126,7 @@
       <div>累計対話数</div>
       <div class="number" id="dialogue">0</div>
       <div class="buttons">
-        <button onclick="addDialogue()">＋1</button>
+        <button onclick="addDialogue()">⚡＋1</button>
       </div>
     </div>
 
@@ -124,7 +134,7 @@
       <div>活動人数</div>
       <div class="number" id="members">0</div>
       <div class="buttons">
-        <button onclick="addMember()">＋1</button>
+        <button onclick="addMember()">👥＋1</button>
       </div>
     </div>
 
@@ -143,16 +153,22 @@
       const now = new Date();
       const diff = targetDate - now;
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      document.getElementById("countdown").innerHTML = days + " 日";
+      document.getElementById("countdown").innerText = days + " 日";
     }
 
-    updateCountdown();
     setInterval(updateCountdown, 1000);
+    updateCountdown();
 
-    // 仮データ
-    let daimoku = 100;
-    let dialogue = 10;
-    let members = 5;
+    // ===== ローカル保存 =====
+    let daimoku = localStorage.getItem("daimoku") ? Number(localStorage.getItem("daimoku")) : 100;
+    let dialogue = localStorage.getItem("dialogue") ? Number(localStorage.getItem("dialogue")) : 10;
+    let members = localStorage.getItem("members") ? Number(localStorage.getItem("members")) : 5;
+
+    function save() {
+      localStorage.setItem("daimoku", daimoku);
+      localStorage.setItem("dialogue", dialogue);
+      localStorage.setItem("members", members);
+    }
 
     function render() {
       document.getElementById("daimoku").innerText = daimoku;
@@ -162,16 +178,19 @@
 
     function addDaimoku() {
       daimoku++;
+      save();
       render();
     }
 
     function addDialogue() {
       dialogue++;
+      save();
       render();
     }
 
     function addMember() {
       members++;
+      save();
       render();
     }
 
