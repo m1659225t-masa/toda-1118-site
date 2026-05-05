@@ -125,40 +125,30 @@
     setInterval(updateCountdown, 1000);
   </script>
 
-<!-- Firebase v8 CDN -->
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
 var firebaseConfig = {
   apiKey: "AIzaSyDRG1rZrDYCAjgmxaRjSsFlMnywlCxvkMQ",
   authDomain: "toda-1118-project.firebaseapp.com",
-  projectId: "toda-1118-project",
-  storageBucket: "toda-1118-project.appspot.com",
-  messagingSenderId: "674905210403",
-  appId: "1:674905210403:web:0e5ebd39fbe609e7dabb96"
+  databaseURL: "https://toda-1118-project-default-rtdb.firebaseio.com/",
+  projectId: "toda-1118-project"
 };
 
 // 初期化
 firebase.initializeApp(firebaseConfig);
-var db = firebase.firestore();
+var db = firebase.database();
 
-// データ取得
-db.collection("stats").doc("global").get()
-  .then(function(doc) {
-    if (doc.exists) {
-      var data = doc.data();
+// データ取得（リアルタイム）
+db.ref("stats").on("value", function(snapshot) {
+  var data = snapshot.val();
 
-      document.getElementById("daimoku").innerText = data.totalDaimoku;
-      document.getElementById("dialogue").innerText = data.totalDialogue;
-      document.getElementById("members").innerText = data.activeMembers;
-    } else {
-      console.log("ドキュメントなし");
-    }
-  })
-  .catch(function(error) {
-    console.error("Firestoreエラー:", error);
-  });
+  document.getElementById("daimoku").innerText = data.totalDaimoku;
+  document.getElementById("dialogue").innerText = data.totalDialogue;
+  document.getElementById("members").innerText = data.activeMembers;
+});
 </script>
 </body>
 </html>
